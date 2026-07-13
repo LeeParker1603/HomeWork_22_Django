@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Главная</title>
+    <title>Контакты</title>
     <!-- Подключение локальных файлов стилей Bootstrap -->
     <link href="/catalog/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -86,88 +86,72 @@
     <!--        </ul>-->
             <hr>
             <!-- Выпадающее меню пользователя снизу -->
-             <!-- ВСПЛЫВАЮЩЕЕ МЕНЮ ПОЛЬЗОВАТЕЛЯ -->
-            <!-- Класс dropup заставляет окно открываться вверх -->
-            <div class="dropup">
-                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="/catalog/images/image.png" alt="" width="32"
                          height="32"
                          class="rounded-circle me-2">
                     <strong>Пользователь</strong>
                 </a>
-                <!-- Выпадающий список, оформленный под темную тему сайта -->
-                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser">
-                    <li><a class="dropdown-item py-2" href="#">Профиль</a></li>
-                    <li><hr class="dropdown-divider my-1"></li>
-                    <li><a class="dropdown-item py-2" href="#">Выход</a></li>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                    <li><a class="dropdown-item" href="#">Профиль</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Выход</a></li>
                 </ul>
             </div>
         </div>
 
         <!-- ОСНОВНОЙ КОНТЕНТ СТРАНИЦЫ -->
-        <div class="flex-grow-1 p-5 bg-light">
+        <div class="flex-grow-1 p-5 bg-white">
             <div class="text-center mb-5">
-                <h1 class="display-4 fw-normal">Главная</h1>
-                <p class="fs-5 text-muted">Вы находитесь на сайте, предназначенном для продажи товаров.</p>
+                <h1 class="display-5 fw-normal">Контакты</h1>
             </div>
 
-            <!-- СЕТКА С КАРТОЧКАМИ ТОВАРОВ -->
-            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center justify-content-center">
-                <!-- Карточка 1 -->
-                <div class="col" style="max-width: 360px;">
-                    <div class="card mb-4 rounded-3 shadow-sm">
-                        <div class="card-header py-3 text-bg-light">
-                            <h4 class="my-0 fw-normal">Товар 1</h4>
+            <!-- ДВУХКОЛОНОЧНЫЙ БЛОК ФОРМЫ И ТЕКСТА -->
+            <div class="row justify-content-center align-items-start g-5" style="max-width: 1000px; margin: 0 auto;">
+
+                <!-- ЛЕВАЯ КОЛОНКА: ФОРМА -->
+                <div class="col-md-5">
+                    <form method="POST" action="/">
+                        <div class="mb-3">
+                            <label for="inputName" class="form-label text-muted small">Имя</label>
+                            <input type="text" name="name" class="form-control" id="inputName" required>
                         </div>
-                        <div class="card-body">
-                            <h1 class="card-title pricing-card-title">$ 100</h1>
-                            <ul class="list-unstyled mt-3 mb-4 text-muted text-start ps-4">
-                                <li>10 users included, 2 GB of storage</li>
-                                <li>Email support, Help center access</li>
-                            </ul>
-                            <button type="button" class="w-100 btn btn-lg btn-outline-primary">Купить</button>
+
+                        <div class="mb-3">
+                            <label for="inputEmail" class="form-label text-muted small">Почта</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light text-muted">@</span>
+                                <input type="email" name="email" class="form-control" id="inputEmail" placeholder="you@example.com" required>
+                            </div>
                         </div>
-                    </div>
+
+                        <div class="mb-4">
+                            <label for="inputMessage" class="form-label text-muted small">Сообщение</label>
+                            <textarea name="message" class="form-control" id="inputMessage" rows="4" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary px-4 py-2">Отправить</button>
+                    </form>
                 </div>
 
-                <!-- Карточка 2 -->
-                <div class="col" style="max-width: 360px;">
-                    <div class="card mb-4 rounded-3 shadow-sm">
-                        <div class="card-header py-3 text-bg-light">
-                            <h4 class="my-0 fw-normal">Товар 2</h4>
-                        </div>
-                        <div class="card-body">
-                            <h1 class="card-title pricing-card-title">$ 100</h1>
-                            <ul class="list-unstyled mt-3 mb-4 text-muted text-start ps-4">
-                                <li>10 users included, 2 GB of storage</li>
-                                <li>Email support, Help center access</li>
-                            </ul>
-                            <button type="button" class="w-100 btn btn-lg btn-outline-primary">Купить</button>
-                        </div>
-                    </div>
+                <!-- ПРАВАЯ КОЛОНКА: ТЕКСТ КОНТАКТОВ -->
+                <div class="col-md-7">
+                    <h4 class="fw-normal mb-3">Наши контакты</h4>
+                    <p class="text-muted lh-base">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                    <p class="text-muted lh-base mt-4">
+                        While these feedback styles cannot be styled with CSS, you can still customize the feedback text through JavaScript.
+                    </p>
                 </div>
 
-                <!-- Карточка 3 -->
-                <div class="col" style="max-width: 360px;">
-                    <div class="card mb-4 rounded-3 shadow-sm">
-                        <div class="card-header py-3 text-bg-light">
-                            <h4 class="my-0 fw-normal">Товар 3</h4>
-                        </div>
-                        <div class="card-body">
-                            <h1 class="card-title pricing-card-title">$ 100</h1>
-                            <ul class="list-unstyled mt-3 mb-4 text-muted text-start ps-4">
-                                <li>10 users included, 2 GB of storage</li>
-                                <li>Email support, Help center access</li>
-                            </ul>
-                            <button type="button" class="w-100 btn btn-lg btn-outline-primary">Купить</button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- Подключаем Bootstrap JS (будет необходимо для работы выпадающего меню
+
+    <!-- Подключаем Bootstrap JS (необходимо для работы выпадающего меню
     пользователя) -->
     <script src="/catalog/js/bootstrap.bundle.min.js"></script>
 </body>
