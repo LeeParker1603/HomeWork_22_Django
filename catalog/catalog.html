@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог</title>
+    <!-- Подключаем Bootstrap CSS -->
+    <link href="/catalog/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Подключаем иконки Bootstrap Icons -->
+    <link href="https://jsdelivr.net" rel="stylesheet">
+    <style>
+        /* Фиксируем высоту sidebar на весь экран */
+        .sidebar {
+            min-height: 100vh;
+            width: 280px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="d-flex">
+    <!-- БОКОВОЕ МЕНЮ (SIDEBAR) -->
+    <div class="sidebar d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
+        <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <i class="bi bi-bootstrap-fill me-2 fs-4"></i>
+            <span class="fs-4">Меню</span>
+        </a>
+        <hr>
+        <!-- Наше интерактивное меню, работающее как кнопки "Купить" -->
+        <ul class="nav flex-column mb-auto w-100 gap-1">
+            <li class="nav-item">
+                <a href="#" class="btn btn-outline-primary border-0 text-white text-start w-100 px-3 py-2">
+                    <i class="bi bi-house-door me-2"></i> Главная
+                </a>
+            </li>
+            <li class="nav-item">
+                <!-- Для страницы Каталог можно временно оставить этот пункт активным через синий цвет (bg-primary) или как обычную кнопку -->
+                <a href="#" class="btn btn-outline-primary border-0 text-white text-start w-100 px-3 py-2">
+                    <i class="bi bi-tags me-2"></i> Категории
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="btn btn-outline-primary border-0 text-white text-start w-100 px-3 py-2">
+                    <i class="bi bi-grid me-2"></i> Заказы
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="btn btn-outline-primary border-0 text-white text-start w-100 px-3 py-2">
+                    <i class="bi bi-person-lines-fill me-2"></i> Контакты
+                </a>
+            </li>
+        </ul>
+        <hr>
+
+        <!-- ВСПЛЫВАЮЩЕЕ МЕНЮ ПОЛЬЗОВАТЕЛЯ (Используем класс dropup, чтобы оно открывалось вверх) -->
+        <div class="dropup">
+            <!-- Чтобы меню было изначально открыто, как на макете, Bootstrap добавляет класс show к списку ниже -->
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="true">
+                <img src="https://picsum.photos" alt="" width="32" height="32" class="rounded-circle me-2">
+                <strong>Пользователь</strong>
+            </a>
+            <!-- Класс show заставляет меню отображаться сразу при загрузке страницы -->
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow show" aria-labelledby="dropdownUser1" style="position: absolute; inset: auto auto 100% 0px; margin: 0px; transform: translate3d(0px, -8px, 0px);">
+                <li><a class="dropdown-item py-2" href="#">Профиль</a></li>
+                <li><a class="dropdown-item py-2" href="#">Выход</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ СТРАНИЦЫ (КАТАЛОГ) -->
+    <div class="flex-grow-1 p-5 bg-white">
+        <div class="text-center mb-5">
+            <h1 class="display-5 fw-normal">Каталог</h1>
+        </div>
+
+        <!-- СЕТКА С КАРТОЧКАМИ АЛЬБОМА -->
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-4 justify-content-center" style="max-width: 900px; margin: 0 auto;">
+
+            <!-- Карточка 1 -->
+            <div class="col">
+                <div class="card shadow-sm">
+                    <!-- Серая заглушка под картинку (Thumbnail) -->
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded-top" style="height: 225px;">
+                        <span>Thumbnail</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text text-muted">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                            </div>
+                            <small class="text-muted">9 mins</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Карточка 2 -->
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded-top" style="height: 225px;">
+                        <span>Thumbnail</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text text-muted">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                            </div>
+                            <small class="text-muted">9 mins</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Карточка 3 -->
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded-top" style="height: 225px;">
+                        <span>Thumbnail</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text text-muted">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                            </div>
+                            <small class="text-muted">9 mins</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Карточка 4 -->
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded-top" style="height: 225px;">
+                        <span>Thumbnail</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text text-muted">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                            </div>
+                            <small class="text-muted">9 mins</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Подключаем Bootstrap JS -->
+<script src="https://jsdelivr.net"></script>
+</body>
+</html>
