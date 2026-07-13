@@ -25,6 +25,7 @@
 
     </style>
 </head>
+<body>
 <div class="d-flex">
     <!-- БОКОВОЕ МЕНЮ (SIDEBAR) -->
     <div class="sidebar d-flex flex-column flex-shrink-0 p-3 text-white bg-dark">
@@ -85,17 +86,20 @@
 <!--        </ul>-->
         <hr>
         <!-- Выпадающее меню пользователя снизу -->
-        <div class="dropdown">
-            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+         <!-- ВСПЛЫВАЮЩЕЕ МЕНЮ ПОЛЬЗОВАТЕЛЯ -->
+        <!-- Класс dropup заставляет окно открываться вверх -->
+        <div class="dropup">
+            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="/catalog/images/image.png" alt="" width="32"
                      height="32"
                      class="rounded-circle me-2">
                 <strong>Пользователь</strong>
             </a>
-            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                <li><a class="dropdown-item" href="#">Профиль</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Выход</a></li>
+            <!-- Выпадающий список, оформленный под темную тему сайта -->
+            <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser">
+                <li><a class="dropdown-item py-2" href="#">Профиль</a></li>
+                <li><hr class="dropdown-divider my-1"></li>
+                <li><a class="dropdown-item py-2" href="#">Выход</a></li>
             </ul>
         </div>
     </div>
@@ -165,6 +169,6 @@
 
 <!-- Подключаем Bootstrap JS (будет необходимо для работы выпадающего меню
 пользователя) -->
-<script src="/catalog/js/bootstrap.min.js"></script>
+<script src="/catalog/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
