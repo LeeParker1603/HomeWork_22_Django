@@ -1,0 +1,262 @@
+[
+{
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+        "name": "Django Интернет-магазин",
+        "description": "Готовый шаблон internet-магазина с корзиной, оплатой и интеграцией с СДЭК.",
+        "photo": "products/images.png",
+        "category": 1,
+        "price": "25000.00",
+        "created_at": "2026-08-16T09:31:43.343Z",
+        "updated_at": "2026-08-16T09:34:53.627Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+        "name": "Панель мониторинга серверов",
+        "description": "Удобный веб-интерфейс для отслеживания нагрузки на процессоры и диски удаленных машин.",
+        "photo": "products/server.png",
+        "category": 1,
+        "price": "12000.00",
+        "created_at": "2026-08-16T09:31:43.343Z",
+        "updated_at": "2026-08-16T09:48:36.484Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+        "name": "Блог на FastAPI с Markdown",
+        "description": "Сверхбыстрый движок для личного блога с поддержкой SEO-оптимизации и разметки Markdown.",
+        "photo": "products/55799ad19ac90dea39fb334ee26ffd38.png",
+        "category": 1,
+        "price": "8500.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:36:14.792Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 4,
+    "fields": {
+        "name": "Личный кабинет студента",
+        "description": "CRM-система для онлайн-школ: расписание, домашние задания, оценки и чат с куратором.",
+        "photo": "products/banner-kartinka.png",
+        "category": 1,
+        "price": "45000.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:44:12.541Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 5,
+    "fields": {
+        "name": "Бот-магазин цифровых товаров",
+        "description": "Бот в Telegram для автоматической продажи промокодов, ключей активации и аккаунтов.",
+        "photo": "products/blog_9.png",
+        "category": 2,
+        "price": "9500.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:37:45.184Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 6,
+    "fields": {
+        "name": "Бот технической поддержки",
+        "description": "Распределяет заявки пользователей между свободными операторами в админ-панели.",
+        "photo": "products/ap82wj9e03o8kjl0cpwsknd17ii9kbbv.png",
+        "category": 2,
+        "price": "14000.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:40:03.493Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 7,
+    "fields": {
+        "name": "ChatGPT Бот-ассистент",
+        "description": "Интеграция с OpenAI API. Помнит контекст диалога, генерирует изображения, поддерживает подписки.",
+        "photo": "products/gina.png",
+        "category": 2,
+        "price": "18000.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:34:03.641Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 8,
+    "fields": {
+        "name": "Бот для записи на услуги",
+        "description": "Идеально для салонов красоты и барбершопов: выбор мастера, даты, времени и напоминания.",
+        "photo": "products/45355637-68dac09343c0c.jpg",
+        "category": 2,
+        "price": "11500.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:39:21.294Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 9,
+    "fields": {
+        "name": "Парсер Wildberries & Ozon",
+        "description": "Скрипт собирает цены, остатки товаров на складах, отзывы и выгружает всё в Excel.",
+        "photo": "products/unnamed_90_7.png",
+        "category": 3,
+        "price": "7000.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:49:29.424Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 10,
+    "fields": {
+        "name": "Парсер объявлений Авито",
+        "description": "Отслеживает появление новых объявлений по заданным фильтрам и мгновенно шлет их в Telegram.",
+        "photo": "products/illustracia-parsing-avito.png",
+        "category": 3,
+        "price": "6500.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:50:18.966Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 11,
+    "fields": {
+        "name": "Скрапер сайтов недвижимости",
+        "description": "Собирает базу данных объектов жилья, включая геолокацию, контакты собственников и фото.",
+        "photo": "products/111.png",
+        "category": 3,
+        "price": "15000.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:52:43.190Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 12,
+    "fields": {
+        "name": "Мониторинг цен конкурентов",
+        "description": "Ежедневно сравнивает прайс-листы вашего магазина с конкурентами и присылает аналитику.",
+        "photo": "products/competitor-monitorng-scheme.png",
+        "category": 3,
+        "price": "13200.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:46:01.222Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 13,
+    "fields": {
+        "name": "Микросервис авторизации (JWT)",
+        "description": "Готовый модуль регистрации, авторизации и восстановления паролей через JWT-токены.",
+        "photo": "products/jwt-flower.png",
+        "category": 4,
+        "price": "5000.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:45:12.350Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 14,
+    "fields": {
+        "name": "Шлюз уведомлений (SMS/Email)",
+        "description": "Микросервис, объединяющий отправку писем и SMS через разные API (Smsc, Сendsay, Mailgun).",
+        "photo": "products/sms_2-e1727624599151.png",
+        "category": 4,
+        "price": "6000.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:53:39.481Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 15,
+    "fields": {
+        "name": "Сервис конвертации валют",
+        "description": "Кеширует актуальные курсы ЦБ РФ и предоставляет быстрое API для конвертации в реальном времени.",
+        "photo": "products/17143960.png",
+        "category": 4,
+        "price": "4000.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:51:08.135Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 16,
+    "fields": {
+        "name": "Сжиматель изображений на лету",
+        "description": "Оптимизирует загружаемые медиафайлы, конвертирует в WebP и уменьшает вес картинок на 70%.",
+        "photo": "products/087f752db0b2e056838b7fef20e10333.jpg",
+        "category": 4,
+        "price": "8900.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:51:30.906Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 17,
+    "fields": {
+        "name": "Автоматический бэкапер баз данных",
+        "description": "Скрипт делает дампы PostgreSQL/MySQL по расписанию и загружает архивы на Яндекс.Диск.",
+        "photo": "products/images_2.png",
+        "category": 5,
+        "price": "3500.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:42:18.054Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 18,
+    "fields": {
+        "name": "Генератор PDF-отчетов",
+        "description": "Утилита для динамического формирования красивых счетов, актов и чеков с подписями из HTML-шаблона.",
+        "photo": "products/ai-pdf-maker.png",
+        "category": 5,
+        "price": "5500.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:40:37.122Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 19,
+    "fields": {
+        "name": "Очиститель логов по правилам",
+        "description": "Утилита для мониторинга свободного места на сервере и безопасной ротации лог-файлов.",
+        "photo": "products/zk9q0aatu3905qhwi25ic30ke3sg8xgv.jpg",
+        "category": 5,
+        "price": "2500.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:47:04.841Z"
+    }
+},
+{
+    "model": "catalog.product",
+    "pk": 20,
+    "fields": {
+        "name": "Генератор QR-кодов для СБП",
+        "description": "Консольный скрипт для мгновенного формирования статических и динамических QR-кодов оплаты.",
+        "photo": "products/QR_with_logo.png",
+        "category": 5,
+        "price": "4800.00",
+        "created_at": "2026-08-16T09:31:43.344Z",
+        "updated_at": "2026-08-16T09:43:12.412Z"
+    }
+}
+]

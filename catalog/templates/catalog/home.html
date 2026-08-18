@@ -21,29 +21,48 @@
 
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Skystore</h1>
-    <p class="lead">Skystore - это отличный вариант хранения ваших плагинов и примеров кода, который вы бы хотели
-        продать</p>
+    <p class="lead">Skystore - это отличный магазин товаров</p>
 </div>
 
 <div class="container">
-    <div class="row text-center">
-        <div class="col-3">
-            <div class="card mb-4 box-shadow">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Удобный сервис рассылок</h4>
-                </div>
-                <div class="card-body">
-                    <h1 class="card-title pricing-card-title">$ 140</h1>
-                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                        <li>- Неограниченная лицензия</li>
-                        <li>- Поддержка</li>
-                        <li>- Установка на сервер</li>
-                        <li>- Получение обновлений</li>
-                    </ul>
-                    <button type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
+     <div class="row text-center justify-content-start">
+        {% for product in products_list %}
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card h-100 box-shadow">
+                    <!-- Блок для вывода изображения товара -->
+                    {% if product.photo %}
+                        <img src="{{ product.photo.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 180px; object-fit: cover;">
+                    {% else %}
+                        <!-- Картинка-заглушка, если изображение не загружено -->
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
+                            <span class="text-muted">Нет фото</span>
+                        </div>
+                    {% endif %}
+
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">{{ product.name }}</h4>
+                    </div>
+                    <div class="card-body d-flex flex-column text-start">
+                        <h1 class="card-title pricing-card-title text-center">{{ product.price }} <small class="text-muted">руб.</small></h1>
+
+                        <!-- Описание товара -->
+                        <p class="card-text text-muted flex-grow-1 mt-3">
+                            {{ product.description|truncatechars:100 }}
+                        </p>
+
+                        <p class="text-muted small mt-2">Категория: {{ product.category.name }}</p>
+                        <button type="button" class="btn btn-lg btn-block btn-outline-primary mt-auto">Купить</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% empty %}
+            <!-- Если товаров в базе данных пока нет -->
+            <div class="col-12">
+                <div class="alert alert-info text-center" role="alert">
+                    В каталоге пока нет ни одного товара. Заполните их через админку!
+                </div>
+            </div>
+        {% endfor %}
     </div>
 
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
