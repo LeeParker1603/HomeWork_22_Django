@@ -1,26 +1,75 @@
-from django.shortcuts import render
-from catalog.models import Product, ContactInfo
+from django.shortcuts import render, get_object_or_404, redirect
+from django.core.paginator import Paginator
+from catalog.models import Product, Category, ContactInfo
 
 
 def home_view(request):
-    # 1. Берем ВСЕ продукты из базы данных для отображения на сайте
-    products_list = Product.objects.all()
+    # Лаконичный запрос ко всем продуктам
+    products_all = Product.objects.all().order_by('-created_at')
 
-    # 2. Дополнительное задание: берем последние 5 созданных для вывода в консоль
+    # Реализация пагинации: выводим по 6 товаров на страницу
+    paginator = Paginator(products_all, 6)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Доп. задание из прошлой работы: вывод последних 5 в консоль
     latest_products = Product.objects.all().order_by('-created_at')[:5]
-
     print("--- Последние 5 продуктов ---")
     for product in latest_products:
         print(f"Товар: {product.name} | Цена: {product.price}")
-    print("-----------------------------")
 
-    # 3. Формируем контекст, где ключ 'products_list' строго совпадает с циклом в HTML
     context = {
-        'products_list': products_list
+        'page_obj': page_obj  # Передаем объект пагинации вместо простого списка
     }
-
-    # 4. ОБЯЗАТЕЛЬНО передаем context третьим аргументом!
     return render(request, 'catalog/home.html', context)
+
+
+def product_detail_view(request, pk):
+    # Извлечение одного объекта через ORM по pk с защитой от ошибок (404)
+    product = get_object_or_404(Product, pk=pk)
+    context = {
+        'product': product
+    }
+    return render(request, 'catalog/product_detail.html', context)
+
+
+def product_create_view(request):
+    # Дополнительное задание: Страница формы создания товара
+    categories = Category.objects.all()
+    errors = {}
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        price = request.POST.get('price')
+        category_id = request.POST.get('category')
+        description = request.POST.get('description', '')
+        photo = request.FILES.get('photo')  # Получаем загруженный файл изображения
+
+        # Базовая валидация (поля обязательны)
+        if not name:
+            errors['name'] = 'Укажите наименование товара.'
+        if not price:
+            errors['price'] = 'Укажите цену товара.'
+        if not category_id:
+            errors['category'] = 'Выберите категорию.'
+
+        if not errors:
+            # Сохранение нового товара в БД
+            category = get_object_or_404(Category, pk=category_id)
+            new_product = Product.objects.create(
+                name=name,
+                price=price,
+                category=category,
+                description=description,
+                photo=photo
+            )
+            return redirect('catalog:product_detail', pk=new_product.pk)
+
+    context = {
+        'categories': categories,
+        'errors': errors
+    }
+    return render(request, 'catalog/product_form.html', context)
 
 
 
