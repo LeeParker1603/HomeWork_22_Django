@@ -1,0 +1,26 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}Удаление статьи — Skystore{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card border-danger box-shadow">
+            <div class="card-header bg-danger text-white">
+                <h4 class="my-0">⚠️ Подтверждение удаления</h4>
+            </div>
+            <div class="card-body text-center">
+                <p class="lead">Вы действительно хотите безвозвратно удалить статью?</p>
+                <h3 class="fw-bold my-3 text-secondary">«{{ object.title }}»</h3>
+                <p class="text-danger small">Это действие нельзя будет отменить. Данные сотрутся из PostgreSQL.</p>
+                
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <a href="{% url 'catalog:blog_detail' object.pk %}" class="btn btn-secondary me-2">Отмена</a>
+                    <button type="submit" class="btn btn-danger px-4">Да, удалить статью</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

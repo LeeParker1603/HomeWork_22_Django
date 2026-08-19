@@ -1,0 +1,48 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}Блог — Skystore{% endblock %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Блог разработки</h1>
+    <p class="lead">Полезные статьи, обзоры обновлений плагинов и инструкции по настройке кода.</p>
+    <a href="{% url 'catalog:blog_create' %}" class="btn btn-primary mt-2">✍️ Написать статью</a>
+</div>
+
+<div class="row text-start justify-content-start">
+    {% for article in articles %}
+        <div class="col-md-6 col-sm-12 mb-4">
+            <div class="card h-100 box-shadow">
+                {% if article.photo %}
+                    <img src="{{ article.photo.url }}" class="card-img-top" alt="{{ article.title }}" style="height: 250px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 250px;">
+                        <span class="text-muted">Нет изображения</span>
+                    </div>
+                {% endif %}
+
+                <div class="card-body d-flex flex-column">
+                    <h3 class="card-title fw-bold">{{ article.title }}</h3>
+                    <div class="text-muted small mb-3">📅 {{ article.created_at|date:"d.m.Y" }} | 👁️ Просмотров: {{ article.views_count }}</div>
+                    
+                    <!-- Обрезаем текст статьи для анонса в списке -->
+                    <p class="card-text text-secondary flex-grow-1">
+                        {{ article.content|truncatechars:150 }}
+                    </p>
+                    
+                    <div class="mt-3">
+                        <!-- Кнопка ведет на созданный нами ранее макет blog_detail.html -->
+                        <a href="{% url 'catalog:blog_detail' article.pk %}" class="btn btn-outline-info w-100">Читать далее</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12 text-center">
+            <div class="alert alert-info" role="alert">
+                В блоге пока нет ни одной статьи. Будьте первым, кто её напишет!
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
