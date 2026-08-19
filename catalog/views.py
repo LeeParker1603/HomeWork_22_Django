@@ -1,21 +1,20 @@
-from django.views.generic import ListView, DetailView, CreateView, TemplateView, UpdateView, DeleteView
-from django.urls import reverse_lazy, reverse
-from django.utils.text import slugify
-from catalog.models import Product, Category, ContactInfo, BlogArticle
+from django.views.generic import ListView, DetailView, CreateView, TemplateView
+from django.urls import reverse_lazy
+from catalog.models import Product, Category, ContactInfo
 
 
 class ProductListView(ListView):
     model = Product
-    template_name = 'catalog/home.html'
-    context_object_name = 'products_list'
+    template_name = "catalog/home.html"
+    context_object_name = "products_list"
     paginate_by = 6  # Пагинация сохраняется встроенными средствами ListView
-    queryset = Product.objects.all().order_by('-created_at')
+    queryset = Product.objects.all().order_by("-created_at")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories_list'] = Category.objects.all()
+        context["categories_list"] = Category.objects.all()
         # Доп. задание: вывод последних 5 продуктов в консоль при каждом запросе
-        latest_products = Product.objects.all().order_by('-created_at')[:5]
+        latest_products = Product.objects.all().order_by("-created_at")[:5]
         print("--- Последние 5 продуктов ---")
         for product in latest_products:
             print(f"Товар: {product.name} | Цена: {product.price}")
@@ -24,8 +23,8 @@ class ProductListView(ListView):
 
 class ProductDetailView(DetailView):
     model = Product
-    template_name = 'catalog/product_detail.html'
-    context_object_name = 'product'
+    template_name = "catalog/product_detail.html"
+    context_object_name = "product"
 
     def get_object(self, queryset=None):
         # Метод автоматически увеличивает количество просмотров при открытии товара
@@ -37,76 +36,25 @@ class ProductDetailView(DetailView):
 
 class ProductCreateView(CreateView):
     model = Product
-    template_name = 'catalog/product_form.html'
-    fields = ['name', 'price', 'category', 'photo', 'description']
-    success_url = reverse_lazy('catalog:home')  # Куда перенаправить после создания
+    template_name = "catalog/product_form.html"
+    fields = ["name", "price", "category", "photo", "description"]
+    success_url = reverse_lazy("catalog:home")
+
+    # Переопределяем метод, чтобы вывести переменную 'categories' в шаблон
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Передаем список всех категорий для вашего цикла {% for %}
+        context["categories"] = Category.objects.all()
+        return context
 
 
 class ContactsTemplateView(TemplateView):
-    template_name = 'catalog/contacts.html'
+    template_name = "catalog/contacts.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['contact_data'] = ContactInfo.objects.first()
+        context["contact_data"] = ContactInfo.objects.first()
         return context
-
-# _________________________________________________
-# РАБОТА С БЛОГОМ
-# _________________________________________________
-
-# 1. Список статей (Выводит только опубликованные)
-class BlogArticleListView(ListView):
-    model = BlogArticle
-    template_name = 'catalog/blog_list.html'
-    context_object_name = 'articles'
-
-    def get_queryset(self):
-        # фильтруем статьи по признаку публикации
-        return super().get_queryset().filter(is_published=True)
-
-
-# 2. Детальный просмотр статьи (+1 к счетчику просмотров)
-class BlogArticleDetailView(DetailView):
-    model = BlogArticle
-    template_name = 'catalog/blog_detail.html'
-    context_object_name = 'article'
-
-    def get_object(self, queryset=None):
-        # переопределяем метод для увеличения просмотров
-        obj = super().get_object(queryset)
-        obj.views_count += 1
-        obj.save()
-        return obj
-
-
-# 3. Создание новой статьи
-class BlogArticleCreateView(CreateView):
-    model = BlogArticle
-    template_name = 'catalog/blog_form.html'
-    fields = ['title', 'content', 'photo', 'is_published']
-
-    def get_success_url(self):
-        # перенаправляем на страницу статьи после создания.
-        # Используем reverse вместо reverse_lazy, так как метод вызывается динамически
-        return reverse('catalog:blog_detail', kwargs={'pk': self.object.pk})
-
-
-# 4. Редактирование существующей статьи
-class BlogArticleUpdateView(UpdateView):
-    model = BlogArticle
-    template_name = 'catalog/blog_form.html'
-    fields = ['title', 'content', 'photo', 'is_published']
-
-    def get_success_url(self):
-        # После редактирования также возвращаем пользователя на саму статью
-        return reverse('catalog:blog_detail', kwargs={'pk': self.object.pk})
-
-
-# 5. Удаление статьи
-class BlogArticleDeleteView(DeleteView):
-    model = BlogArticle
-    template_name = 'catalog/blog_confirm_delete.html'
-    success_url = reverse_lazy('catalog:blog_list')  # После удаления возвращаем на список статей
 
 
 # def home_view(request):

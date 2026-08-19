@@ -6,7 +6,7 @@
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Блог разработки</h1>
     <p class="lead">Полезные статьи, обзоры обновлений плагинов и инструкции по настройке кода.</p>
-    <a href="{% url 'catalog:blog_create' %}" class="btn btn-primary mt-2">✍️ Написать статью</a>
+    <a href="{% url 'blog:blog_create' %}" class="btn btn-primary mt-2">✍️ Написать статью</a>
 </div>
 
 <div class="row text-start justify-content-start">
@@ -32,7 +32,7 @@
                     
                     <div class="mt-3">
                         <!-- Кнопка ведет на созданный нами ранее макет blog_detail.html -->
-                        <a href="{% url 'catalog:blog_detail' article.pk %}" class="btn btn-outline-info w-100">Читать далее</a>
+                        <a href="{% url 'blog:blog_detail' article.pk %}" class="btn btn-outline-info w-100">Читать далее</a>
                     </div>
                 </div>
             </div>

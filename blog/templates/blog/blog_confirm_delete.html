@@ -16,7 +16,7 @@
                 
                 <form method="post" class="mt-4">
                     {% csrf_token %}
-                    <a href="{% url 'catalog:blog_detail' object.pk %}" class="btn btn-secondary me-2">Отмена</a>
+                    <a href="{% url 'blog:blog_detail' object.pk %}" class="btn btn-secondary me-2">Отмена</a>
                     <button type="submit" class="btn btn-danger px-4">Да, удалить статью</button>
                 </form>
             </div>

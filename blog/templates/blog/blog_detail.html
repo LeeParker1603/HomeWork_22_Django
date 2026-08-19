@@ -12,7 +12,7 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{% url 'catalog:home' %}">Главная (Каталог)</a></li>
-                    <li class="breadcrumb-item"><a href="{% url 'catalog:blog_list' %}">Блог</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'blog:blog_list' %}">Блог</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ article.title|truncatechars:30 }}</li>
                 </ol>
             </nav>
@@ -56,7 +56,7 @@
                                 🏠 На главную
                             </a>
                             <!-- Кнопка возврата к полному списку статей блога -->
-                            <a href="{% url 'catalog:blog_list' %}" class="btn btn-secondary">
+                            <a href="{% url 'blog:blog_list' %}" class="btn btn-secondary">
                                 📋 Назад в блог
                             </a>
                         </div>
@@ -64,11 +64,11 @@
                         <!-- Правая группа кнопок: Управление статьей (CRUD) -->
                         <div>
                             <!-- Кнопка редактирования статьи -->
-                            <a href="{% url 'catalog:blog_update' article.pk %}" class="btn btn-warning me-2 text-dark">
+                            <a href="{% url 'blog:blog_update' article.pk %}" class="btn btn-warning me-2 text-dark">
                                 ✏️ Редактировать
                             </a>
                             <!-- Кнопка удаления статьи -->
-                            <a href="{% url 'catalog:blog_delete' article.pk %}" class="btn btn-danger">
+                            <a href="{% url 'blog:blog_delete' article.pk %}" class="btn btn-danger">
                                 🗑️ Удалить
                             </a>
                         </div>
