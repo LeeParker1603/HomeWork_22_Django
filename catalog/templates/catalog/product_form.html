@@ -1,55 +1,50 @@
 {% extends 'catalog/base.html' %}
 
-{% block title %}Добавить товар — Skystore{% endblock %}
+{% block title %}
+    {% if object %}Редактировать товар{% else %}Добавить товар{% endif %} — Skystore
+{% endblock %}
 
 {% block content %}
     <div class="row justify-content-center mt-5">
         <div class="col-md-8">
             <div class="card box-shadow">
                 <div class="card-header bg-primary text-white">
-                    <h4 class="my-0">Новый товар</h4>
+                    <h4 class="my-0">
+                        {% if object %}✏️ Редактирование: {{ object.name }}{% else %}➕ Добавить новый товар{% endif %}
+                    </h4>
                 </div>
                 <div class="card-body">
                     <!-- enctype="multipart/form-data" ОБЯЗАТЕЛЕН для загрузки файлов/изображений -->
-                    <form method="post" enctype="multipart/form-data" class="needs-validation">
+                    <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
 
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Наименование товара *</label>
-                            <input type="text" name="name" id="name" class="form-control {% if errors.name %}is-invalid{% endif %}" placeholder="Введите название">
-                            {% if errors.name %}<div class="invalid-feedback">{{ errors.name }}</div>{% endif %}
-                        </div>
+                        <!-- Перебираем поля автоматической Django формы -->
+                        {% for field in form %}
+                            <div class="mb-3">
+                                {{ field.label_tag }}
 
-                        <div class="mb-3">
-                            <label for="price" class="form-label">Цена за покупку (руб.) *</label>
-                            <input type="number" step="0.01" name="price" id="price" class="form-control {% if errors.price %}is-invalid{% endif %}" placeholder="0.00">
-                            {% if errors.price %}<div class="invalid-feedback">{{ errors.price }}</div>{% endif %}
-                        </div>
+                                <!-- Отрисовка самого поля ввода с уже подключенными классами Bootstrap -->
+                                {{ field }}
 
-                        <div class="mb-3">
-                            <label for="category" class="form-label">Категория *</label>
-                            <select name="category" id="category" class="form-select {% if errors.category %}is-invalid{% endif %}">
-                                <option value="">-- Выберите категорию --</option>
-                                {% for category in categories %}
-                                    <option value="{{ category.pk }}">{{ category.name }}</option>
-                                {% endfor %}
-                            </select>
-                            {% if errors.category %}<div class="invalid-feedback">{{ errors.category }}</div>{% endif %}
-                        </div>
+                                <!-- Вывод текста требований к файлу из help_text -->
+                                {% if field.help_text %}
+                                    <div class="form-text text-muted small mt-1">
+                                        <i class="bi bi-info-circle"></i> {{ field.help_text }}
+                                    </div>
+                                {% endif %}
 
-                        <div class="mb-3">
-                            <label for="photo" class="form-label">Изображение товара</label>
-                            <input type="file" name="photo" id="photo" class="form-control">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="description" class="form-label">Описание</label>
-                            <textarea name="description" id="description" rows="4" class="form-control" placeholder="Опишите преимущества вашего плагина или скрипта..."></textarea>
-                        </div>
+                                <!-- Вывод ошибок валидации (clean_price, clean_name и др.) -->
+                                {% if field.errors %}
+                                    <div class="text-danger small mt-1">
+                                        <strong><i class="bi bi-exclamation-circle"></i> {{ field.errors|join:", " }}</strong>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
 
                         <div class="d-flex justify-content-between mt-4">
                             <a href="{% url 'catalog:home' %}" class="btn btn-outline-secondary">Отмена</a>
-                            <button type="submit" class="btn btn-success px-4">Сохранить в БД</button>
+                            <button type="submit" class="btn btn-success px-4">Сохранить изменения</button>
                         </div>
                     </form>
                 </div>
