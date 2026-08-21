@@ -30,9 +30,10 @@
                 <li><strong>Последнее изменение:</strong> {{ product.updated_at|date:"d.m.Y H:i" }}</li>
             </ul>
 
-            <div class="mt-auto pt-4">
-                <!-- Кнопка возврата обратно в каталог -->
-                <a href="{% url 'catalog:home' %}" class="btn btn-lg btn-secondary w-100">Назад в каталог</a>
+            <div class="mt-4 pt-3 border-top d-flex gap-2">
+                <a href="{% url 'catalog:home' %}" class="btn btn-secondary">Назад в каталог</a>
+                <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning text-dark">Редактировать товар</a>
+                <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить товар</a>
             </div>
         </div>
     </div>

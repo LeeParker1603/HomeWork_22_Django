@@ -1,6 +1,7 @@
-from django.views.generic import ListView, DetailView, CreateView, TemplateView
-from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, TemplateView, DeleteView, UpdateView
+from django.urls import reverse_lazy, reverse
 from catalog.models import Product, Category, ContactInfo
+from catalog.forms import ProductForm
 
 
 class ProductListView(ListView):
@@ -36,16 +37,31 @@ class ProductDetailView(DetailView):
 
 class ProductCreateView(CreateView):
     model = Product
+    form_class = ProductForm
     template_name = "catalog/product_form.html"
-    fields = ["name", "price", "category", "photo", "description"]
     success_url = reverse_lazy("catalog:home")
 
     # Переопределяем метод, чтобы вывести переменную 'categories' в шаблон
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Передаем список всех категорий для вашего цикла {% for %}
+        # Передаем список всех категорий для цикла {% for %}
         context["categories"] = Category.objects.all()
         return context
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm  # Используем форму и для редактирования
+    template_name = 'catalog/product_form.html'
+
+    def get_success_url(self):
+        # После редактирования возвращаем пользователя на детальную страницу товара
+        return reverse('catalog:product_detail', kwargs={'pk': self.object.pk})
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    template_name = 'catalog/product_confirm_delete.html'
+    success_url = reverse_lazy('catalog:home')
 
 
 class ContactsTemplateView(TemplateView):
