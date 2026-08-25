@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "catalog",
     "blog",
+    "users"
 ]
 
 MIDDLEWARE = [
@@ -131,3 +132,17 @@ MEDIA_URL = "/media/"
 
 # Абсолютный путь в файловой системе, куда Django будет сохранять загруженные файлы
 MEDIA_ROOT = BASE_DIR / "media"
+
+# Указываем путь к кастомной модели пользователя
+AUTH_USER_MODEL = 'users.User'
+
+# Консольный бэкенд для тестирования писем (выводит текст письма в терминал)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST_USER = 'no-reply@skystore.ru'
+
+# Куда перенаправлять пользователя после успешного входа на сайт
+LOGIN_REDIRECT_URL = 'catalog:home'
+
+# Куда перенаправлять пользователя, если он пытается зайти на закрытую страницу анонимом
+LOGIN_URL = 'users:login'
+
