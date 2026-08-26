@@ -1,0 +1,41 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}{{ product.name }} — Детали товара{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            {% if product.photo %}
+                <img src="{{ product.photo.url }}" class="img-fluid rounded box-shadow" alt="{{ product.name }}">
+            {% else %}
+                <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 400px;">
+                    <span class="text-muted">Изображение отсутствует</span>
+                </div>
+            {% endif %}
+        </div>
+        <div class="col-md-6 d-flex flex-column">
+            <h1 class="display-5 fw-bold">{{ product.name }}</h1>
+            <p class="badge bg-secondary align-self-start p-2 fs-6 mb-3">ID товара: {{ product.pk }}</p>
+            <h2 class="text-primary my-3">{{ product.price }} руб.</h2>
+
+            <hr>
+            <h5>Описание товара:</h5>
+            <p class="lead text-muted">{{ product.description }}</p>
+            <hr>
+
+            <ul class="list-unstyled text-small text-muted mt-2">
+                <li><strong>Категория:</strong> {{ product.category.name }}</li>
+                <li><strong>Дата добавления:</strong> {{ product.created_at|date:"d.m.Y H:i" }}</li>
+                <li><strong>Последнее изменение:</strong> {{ product.updated_at|date:"d.m.Y H:i" }}</li>
+            </ul>
+
+            <div class="mt-4 pt-3 border-top d-flex gap-2">
+                <a href="{% url 'catalog:home' %}" class="btn btn-secondary">Назад в каталог</a>
+                <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning text-dark">Редактировать товар</a>
+                <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить товар</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

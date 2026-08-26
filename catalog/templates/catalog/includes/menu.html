@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <nav class="d-flex w-100 align-items-center">
+        <!-- Левая сторона: Основные ссылки сайта -->
+        <div class="d-flex align-items-center">
+            <a class="p-2 btn btn-outline-primary me-2" href="{% url 'catalog:home' %}">Каталог</a>
+            <a class="p-2 btn btn-outline-info me-2" href="{% url 'blog:blog_list' %}">Блог</a>
+            <a class="p-2 btn btn-outline-primary me-2" href="{% url 'catalog:contacts' %}">Контакты</a>
+        </div>
+
+        <!-- Правая сторона: Блок авторизации, профиля и входа -->
+        <!-- Класс ms-auto (margin-start: auto) сдвигает всю эту группу к правому краю экрана -->
+        <div class="ms-auto d-flex align-items-center">
+            {% if user.is_authenticated %}
+                <!-- Кнопки для авторизованных пользователей -->
+                <a class="p-2 btn btn-outline-success me-2" href="{% url 'catalog:product_create' %}">Добавить товар</a>
+                <a class="p-2 btn btn-primary me-2" href="{% url 'users:profile' %}">Профиль ({{ user.email }})</a>
+
+                <form method="post" action="{% url 'users:logout' %}" class="d-inline m-0 p-0">
+                    {% csrf_token %}
+                    <button type="submit" class="p-2 btn btn-danger">Выйти</button>
+                </form>
+            {% else %}
+                <!-- Кнопки для гостей сайта (Логин и Регистрация теперь строго справа) -->
+                <a class="p-2 btn btn-outline-secondary me-2" href="{% url 'users:login' %}">Войти</a>
+                <a class="p-2 btn btn-success" href="{% url 'users:register' %}">Регистрация</a>
+            {% endif %}
+        </div>
+    </nav>
+</body>
+</html>

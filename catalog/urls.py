@@ -1,13 +1,21 @@
 from django.urls import path
-from .views import home_view, contacts_view
+from .views import (
+    ProductListView,
+    ProductDetailView,
+    ProductCreateView,
+    ContactsTemplateView,
+    ProductUpdateView,
+    ProductDeleteView
+)
 
 # Устанавливаем пространство имен для приложения (чтобы не было конфликтов)
-app_name = 'catalog'
+app_name = "catalog"
 
 urlpatterns = [
-    # Главная страница (пустой путь, но по критериям для Django корень оставляют так)
-    path('', home_view, name='home'),
-
-    # Страница контактов (обязательно со слэшем на конце по ТЗ)
-    path('contacts/', contacts_view, name='contacts'),
+    path("", ProductListView.as_view(), name="home"),
+    path("contacts/", ContactsTemplateView.as_view(), name="contacts"),
+    path("products/<int:pk>/", ProductDetailView.as_view(), name="product_detail"),
+    path("products/create/", ProductCreateView.as_view(), name="product_create"), # Создание
+    path('products/<int:pk>/update/', ProductUpdateView.as_view(), name='product_update'), # Редактирование
+    path('products/<int:pk>/delete/', ProductDeleteView.as_view(), name='product_delete'), # Удаление
 ]

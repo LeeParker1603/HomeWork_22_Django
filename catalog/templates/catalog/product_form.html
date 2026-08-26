@@ -1,0 +1,54 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}
+    {% if object %}Редактировать товар{% else %}Добавить товар{% endif %} — Skystore
+{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+            <div class="card box-shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="my-0">
+                        {% if object %}✏️ Редактирование: {{ object.name }}{% else %}➕ Добавить новый товар{% endif %}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <!-- enctype="multipart/form-data" ОБЯЗАТЕЛЕН для загрузки файлов/изображений -->
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <!-- Перебираем поля автоматической Django формы -->
+                        {% for field in form %}
+                            <div class="mb-3">
+                                {{ field.label_tag }}
+
+                                <!-- Отрисовка самого поля ввода с уже подключенными классами Bootstrap -->
+                                {{ field }}
+
+                                <!-- Вывод текста требований к файлу из help_text -->
+                                {% if field.help_text %}
+                                    <div class="form-text text-muted small mt-1">
+                                        <i class="bi bi-info-circle"></i> {{ field.help_text }}
+                                    </div>
+                                {% endif %}
+
+                                <!-- Вывод ошибок валидации (clean_price, clean_name и др.) -->
+                                {% if field.errors %}
+                                    <div class="text-danger small mt-1">
+                                        <strong><i class="bi bi-exclamation-circle"></i> {{ field.errors|join:", " }}</strong>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'catalog:home' %}" class="btn btn-outline-secondary">Отмена</a>
+                            <button type="submit" class="btn btn-success px-4">Сохранить изменения</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

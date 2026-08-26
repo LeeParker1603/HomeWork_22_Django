@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 
 class Category(models.Model):
     name = models.CharField(max_length=150, verbose_name="Наименование")
@@ -13,6 +12,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Product(models.Model):
     name = models.CharField(
@@ -40,7 +40,7 @@ class Product(models.Model):
         help_text="Введите категорию товара",
         null=True,
         blank=True,
-        related_name='products'
+        related_name="products",
     )
     price = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name="Цена за покупку"
@@ -49,6 +49,8 @@ class Product(models.Model):
     updated_at = models.DateTimeField(
         auto_now=True, verbose_name="Дата последнего изменения"
     )
+
+    views_count = models.IntegerField(default=0, verbose_name="Количество просмотров")
 
     def __str__(self):
         return self.name
@@ -60,13 +62,13 @@ class Product(models.Model):
 
 
 class ContactInfo(models.Model):
-    phone = models.CharField(max_length=20, verbose_name='Телефон')
-    email = models.EmailField(verbose_name='Email')
-    address = models.TextField(verbose_name='Адрес')
+    phone = models.CharField(max_length=20, verbose_name="Телефон")
+    email = models.EmailField(verbose_name="Email")
+    address = models.TextField(verbose_name="Адрес")
 
     class Meta:
-        verbose_name = 'Контактные данные'
-        verbose_name_plural = 'Контактные данные'
+        verbose_name = "Контактные данные"
+        verbose_name_plural = "Контактные данные"
 
     def __str__(self):
         return self.email

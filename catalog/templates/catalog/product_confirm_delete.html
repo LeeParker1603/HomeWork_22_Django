@@ -1,0 +1,35 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}Удаление товара — Skystore{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card border-danger box-shadow">
+            <div class="card-header bg-danger text-white">
+                <h4 class="my-0">⚠️ Подтверждение удаления товара</h4>
+            </div>
+            <div class="card-body text-center">
+                <p class="lead">Вы действительно хотите безвозвратно удалить этот товар из каталога?</p>
+
+                <!-- Показываем имя удаляемого продукта -->
+                <h3 class="fw-bold my-3 text-secondary">«{{ object.name }}»</h3>
+
+                <p class="text-danger small">Это действие сотрет запись из базы данных PostgreSQL. Восстановить товар будет невозможно.</p>
+
+                <!-- Форма отправки POST-запроса на удаление -->
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <!-- Отмена возвращает на детальную страницу этого же товара -->
+                    <a href="{% url 'catalog:product_detail' object.pk %}" class="btn btn-secondary me-2">
+                        Отмена
+                    </a>
+                    <button type="submit" class="btn btn-danger px-4">
+                        Да, удалить товар
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
