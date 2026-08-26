@@ -63,14 +63,13 @@
 
                         <!-- Правая группа кнопок: Управление статьей (CRUD) -->
                         <div>
-                            <!-- Кнопка редактирования статьи -->
-                            <a href="{% url 'blog:blog_update' article.pk %}" class="btn btn-warning me-2 text-dark">
-                                ✏️ Редактировать
-                            </a>
-                            <!-- Кнопка удаления статьи -->
-                            <a href="{% url 'blog:blog_delete' article.pk %}" class="btn btn-danger">
-                                🗑️ Удалить
-                            </a>
+                            <!-- Кнопки видны только контент-менеджерам -->
+                            {% if perms.blog.change_blogarticle %}
+                                <a href="{% url 'blog:blog_update' article.pk %}" class="btn btn-warning me-2 text-dark">Редактировать</a>
+                            {% endif %}
+                            {% if perms.blog.delete_blogarticle %}
+                                <a href="{% url 'blog:blog_delete' article.pk %}" class="btn btn-danger">Удалить</a>
+                            {% endif %}
                         </div>
 
                     </div>
