@@ -1,7 +1,9 @@
+from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView, TemplateView, DeleteView, UpdateView
 from django.urls import reverse_lazy, reverse
 from catalog.models import Product, Category, ContactInfo
 from catalog.forms import ProductForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class ProductListView(ListView):
@@ -35,7 +37,7 @@ class ProductDetailView(DetailView):
         return obj
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = "catalog/product_form.html"
@@ -48,7 +50,7 @@ class ProductCreateView(CreateView):
         context["categories"] = Category.objects.all()
         return context
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm  # Используем форму и для редактирования
     template_name = 'catalog/product_form.html'
@@ -58,7 +60,7 @@ class ProductUpdateView(UpdateView):
         return reverse('catalog:product_detail', kwargs={'pk': self.object.pk})
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = 'catalog/product_confirm_delete.html'
     success_url = reverse_lazy('catalog:home')
@@ -72,92 +74,21 @@ class ContactsTemplateView(TemplateView):
         context["contact_data"] = ContactInfo.objects.first()
         return context
 
+    def post(self, request, *args, **kwargs):
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        message = request.POST.get('message')
 
-# def home_view(request):
-#     # Лаконичный запрос ко всем продуктам
-#     products_all = Product.objects.all().order_by('-created_at')
-#
-#     # Реализация пагинации: выводим по 6 товаров на страницу
-#     paginator = Paginator(products_all, 6)
-#     page_number = request.GET.get('page')
-#     page_obj = paginator.get_page(page_number)
-#
-#     # Доп. задание из прошлой работы: вывод последних 5 в консоль
-#     latest_products = Product.objects.all().order_by('-created_at')[:5]
-#     print("--- Последние 5 продуктов ---")
-#     for product in latest_products:
-#         print(f"Товар: {product.name} | Цена: {product.price}")
-#
-#     context = {
-#         'page_obj': page_obj  # Передаем объект пагинации вместо простого списка
-#     }
-#     return render(request, 'catalog/home.html', context)
-#
-#
-# def product_detail_view(request, pk):
-#     # Извлечение одного объекта через ORM по pk с защитой от ошибок (404)
-#     product = get_object_or_404(Product, pk=pk)
-#     context = {
-#         'product': product
-#     }
-#     return render(request, 'catalog/product_detail.html', context)
-#
-#
-# def product_create_view(request):
-#     # Дополнительное задание: Страница формы создания товара
-#     categories = Category.objects.all()
-#     errors = {}
-#
-#     if request.method == 'POST':
-#         name = request.POST.get('name')
-#         price = request.POST.get('price')
-#         category_id = request.POST.get('category')
-#         description = request.POST.get('description', '')
-#         photo = request.FILES.get('photo')  # Получаем загруженный файл изображения
-#
-#         # Базовая валидация (поля обязательны)
-#         if not name:
-#             errors['name'] = 'Укажите наименование товара.'
-#         if not price:
-#             errors['price'] = 'Укажите цену товара.'
-#         if not category_id:
-#             errors['category'] = 'Выберите категорию.'
-#
-#         if not errors:
-#             # Сохранение нового товара в БД
-#             category = get_object_or_404(Category, pk=category_id)
-#             new_product = Product.objects.create(
-#                 name=name,
-#                 price=price,
-#                 category=category,
-#                 description=description,
-#                 photo=photo
-#             )
-#             return redirect('catalog:product_detail', pk=new_product.pk)
-#
-#     context = {
-#         'categories': categories,
-#         'errors': errors
-#     }
-#     return render(request, 'catalog/product_form.html', context)
-#
-#
-#
-# def contacts_view(request):
-#     if request.method == 'POST':
-#         # Здесь остается ваша старая логика обработки формы (если она была),
-#         # например, получение name, phone, message из request.POST
-#         name = request.POST.get('name')
-#         phone = request.POST.get('phone')
-#         message = request.POST.get('message')
-#         print(f"Новое сообщение от {name} ({phone}): {message}")
-#
-#     # Извлекаем из базы данных САМУЮ ПЕРВУЮ запись с контактами
-#     contact_data = ContactInfo.objects.first()
-#
-#     # Передаем объект с контактами в словарь контекста шаблона
-#     context = {
-#         'contact_data': contact_data
-#     }
-#
-#     return render(request, 'catalog/contacts.html', context)
+        # Печатаем данные в консоль PyCharm (как требовалось в прошлых ДЗ)
+        print(f"\n--- Новое сообщение из формы контактов ---")
+        print(f"Имя: {name}")
+        print(f"Телефон: {phone}")
+        print(f"Сообщение: {message}")
+        print(f"-----------------------------------------\n")
+
+        # Получаем контекст, чтобы страница не вернула ошибку при перезагрузке
+        context = self.get_context_data()
+        # Добавляем сообщение об успешной отправке для пользователя
+        context['success'] = True
+
+        return render(request, self.template_name, context)
