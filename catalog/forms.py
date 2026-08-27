@@ -13,7 +13,7 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         # Указываем поля, которые пользователь заполняет в форме
-        fields = ['name', 'price', 'category', 'photo', 'description']
+        fields = ['name', 'price', 'category', 'photo', 'description', 'is_published']
 
         error_messages = {
             'photo': {
@@ -22,7 +22,9 @@ class ProductForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        """Стилизация формы под общую стилистику платформы (Задание 3)"""
+        """Стилизация формы под общую стилистику платформы """
+        # Достаем пользователя (request.user) из переданных аргументов контроллера
+        self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             # Задаем Bootstrap-класс для полей ввода (кроме чекбоксов)
@@ -37,6 +39,12 @@ class ProductForm(forms.ModelForm):
                 field.help_text = "Доступные форматы: JPEG, PNG. Ограничение по размеру: не более 5 МБ."
             else:
                 field.widget.attrs['placeholder'] = f"Введите {field.label.lower()}"
+
+        # ДИНАМИЧЕСКАЯ ПРОВЕРКА ПРАВ:
+        # Если пользователь НЕ суперпользователь и НЕ имеет права публикации — скрываем поле
+        if not (self.user and (self.user.is_superuser or self.user.has_perm('catalog.can_unpublish_product'))):
+            if 'is_published' in self.fields:
+                del self.fields['is_published']
 
     def clean_name(self):
         """Валидация названия на запрещенные слова (Задание 1)"""

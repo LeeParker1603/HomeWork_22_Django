@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, TemplateView, DeleteView, UpdateView
 from django.urls import reverse_lazy, reverse
 from catalog.models import Product, Category, ContactInfo
 from catalog.forms import ProductForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin
 
 
 class ProductListView(ListView):
@@ -11,7 +12,22 @@ class ProductListView(ListView):
     template_name = "catalog/home.html"
     context_object_name = "products_list"
     paginate_by = 6  # Пагинация сохраняется встроенными средствами ListView
-    queryset = Product.objects.all().order_by("-created_at")
+
+    def get_queryset(self):
+        """Динамическая фильтрация товаров в зависимости от прав пользователя"""
+        user = self.request.user
+
+        # Если пользователь — суперпользователь или модератор с правом публикации
+        if user.is_authenticated and (user.is_superuser or user.has_perm('catalog.can_unpublish_product')):
+            return Product.objects.all().order_by('-created_at')
+
+        # If пользователь авторизован, он видит опубликованные ПЛЮС свои собственные на модерации
+        if user.is_authenticated:
+            from django.db.models import Q
+            return Product.objects.filter(Q(is_published=True) | Q(owner=user)).order_by('-created_at')
+
+        # Анонимные гости видят ТОЛЬКО опубликованные товары
+        return Product.objects.filter(is_published=True).order_by('-created_at')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -50,20 +66,83 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         context["categories"] = Category.objects.all()
         return context
 
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
+        # Пункт 2: Автоматически привязываем продукт к авторизованному пользователю
+
+    def form_valid(self, form):
+        product = form.save(commit=False)
+        product.owner = self.request.user  # Записываем текущего пользователя в владельцы
+        product.save()
+        return super().form_valid(form)
+
+    # Передаем request.user в форму
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+
+class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Product
     form_class = ProductForm  # Используем форму и для редактирования
     template_name = 'catalog/product_form.html'
+
+    # Проверка прав: пользователь должен иметь либо глобальное право изменения, либо кастомное право модератора
+    permission_required = 'catalog.change_product'
+
+    def has_permission(self):
+        # Переопределяем метод, чтобы модератор с кастомным правом тоже мог зайти в форму редактирования
+        perms = [self.permission_required, 'catalog.can_unpublish_product']
+        return any(self.request.user.has_perm(perm) for perm in perms)
 
     def get_success_url(self):
         # После редактирования возвращаем пользователя на детальную страницу товара
         return reverse('catalog:product_detail', kwargs={'pk': self.object.pk})
 
+    def test_func(self):
+        product = self.get_object()
+        user = self.request.user
+        # Проверяем, является ли текущий пользователь владельцем или суперпользователем
+        return user == product.owner or user.has_perm('catalog.can_unpublish_product') or user.is_superuser
 
-class ProductDeleteView(LoginRequiredMixin, DeleteView):
+    # Передаем request.user в форму
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+
+class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Product
     template_name = 'catalog/product_confirm_delete.html'
     success_url = reverse_lazy('catalog:home')
+
+    def test_func(self):
+        product = self.get_object()
+        user = self.request.user
+
+        # Условие: текущий пользователь — владелец, ИЛИ суперпользователь,
+        # ИЛИ модератор со специальным системным правом удаления продуктов
+        is_owner = user == product.owner
+        is_moderator = user.has_perm('catalog.delete_product')
+
+        return is_owner or is_moderator or user.is_superuser
+
+
+class ProductTogglePublishView(PermissionRequiredMixin, View):
+    """Контроллер для быстрой публикации/снятия с публикации товара модератором"""
+    # Защищаем контроллер кастомным правом доступа из Задания 1
+    permission_required = 'catalog.can_unpublish_product'
+
+    def post(self, request, pk):
+        # Находим продукт по его ID
+        product = get_object_or_404(Product, pk=pk)
+
+        # Меняем булево значение на противоположное
+        product.is_published = not product.is_published
+        product.save()
+
+        # Перенаправляем модератора обратно на страницу этого же товара
+        return redirect('catalog:product_detail', pk=pk)
 
 
 class ContactsTemplateView(TemplateView):

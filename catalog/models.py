@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 
@@ -52,6 +53,18 @@ class Product(models.Model):
 
     views_count = models.IntegerField(default=0, verbose_name="Количество просмотров")
 
+    # Булево значение (опубликован или нет)
+    is_published = models.BooleanField(default=False, verbose_name='Признак публикации')
+
+    # Добавляем поле владельца (owner)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        verbose_name='Владелец',
+        blank=True,
+        null=True
+    )
+
     def __str__(self):
         return self.name
 
@@ -59,6 +72,10 @@ class Product(models.Model):
         verbose_name = "Товар"
         verbose_name_plural = "Товары"
         ordering = ["name"]
+
+        permissions = [
+            ('can_unpublish_product', 'Может отменять публикацию продукта'),
+        ]
 
 
 class ContactInfo(models.Model):

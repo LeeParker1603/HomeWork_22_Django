@@ -5,7 +5,7 @@ from .views import (
     ProductCreateView,
     ContactsTemplateView,
     ProductUpdateView,
-    ProductDeleteView
+    ProductDeleteView, ProductTogglePublishView
 )
 
 # Устанавливаем пространство имен для приложения (чтобы не было конфликтов)
@@ -18,4 +18,5 @@ urlpatterns = [
     path("products/create/", ProductCreateView.as_view(), name="product_create"), # Создание
     path('products/<int:pk>/update/', ProductUpdateView.as_view(), name='product_update'), # Редактирование
     path('products/<int:pk>/delete/', ProductDeleteView.as_view(), name='product_delete'), # Удаление
+    path('products/<int:pk>/toggle-publish/', ProductTogglePublishView.as_view(), name='product_toggle_publish'), # Модерация
 ]

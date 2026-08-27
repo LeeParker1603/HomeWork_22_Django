@@ -6,13 +6,23 @@
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <h1 class="display-4">Блог разработки</h1>
     <p class="lead">Полезные статьи, обзоры обновлений плагинов и инструкции по настройке кода.</p>
-    <a href="{% url 'blog:blog_create' %}" class="btn btn-primary mt-2">✍️ Написать статью</a>
+    {% if perms.blog.add_blogarticle %}
+        <a href="{% url 'blog:blog_create' %}" class="btn btn-primary mt-2">Написать статью</a>
+    {% endif %}
 </div>
 
 <div class="row text-start justify-content-start">
     {% for article in articles %}
-        <div class="col-md-6 col-sm-12 mb-4">
-            <div class="card h-100 box-shadow">
+        <div class="col-md-6 col-sm-12 mb-4 {% if not article.is_published %}opacity-50{% endif %}">
+            <div class="card h-100 box-shadow position-relative">
+
+                <!-- Индикатор черновика -->
+                {% if not article.is_published %}
+                    <div class="position-absolute top-0 start-0 m-2" style="z-index: 2;">
+                        <span class="badge bg-secondary shadow-sm">Черновик</span>
+                    </div>
+                {% endif %}
+
                 {% if article.photo %}
                     <img src="{{ article.photo.url }}" class="card-img-top" alt="{{ article.title }}" style="height: 250px; object-fit: cover;">
                 {% else %}

@@ -5,6 +5,13 @@
 {% block content %}
 <div class="container mt-5">
     <div class="row">
+        {% if not product.is_published %}
+            <div class="alert alert-warning d-flex align-items-center" role="alert">
+                <div>
+                    <strong> Товар скрыт от покупателей.</strong> На данный момент карточка находится на проверке у модераторов платформы.
+                </div>
+            </div>
+        {% endif %}
         <div class="col-md-6">
             {% if product.photo %}
                 <img src="{{ product.photo.url }}" class="img-fluid rounded box-shadow" alt="{{ product.name }}">
@@ -30,10 +37,37 @@
                 <li><strong>Последнее изменение:</strong> {{ product.updated_at|date:"d.m.Y H:i" }}</li>
             </ul>
 
-            <div class="mt-4 pt-3 border-top d-flex gap-2">
+            <div class="mt-4 pt-3 border-top d-flex flex-wrap gap-2 align-items-center">
+                <!-- Кнопка возврата доступна всем -->
                 <a href="{% url 'catalog:home' %}" class="btn btn-secondary">Назад в каталог</a>
-                <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning text-dark">Редактировать товар</a>
-                <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить товар</a>
+
+                <!-- 1. Кнопка РЕДАКТИРОВАНИЯ: теперь доступна ТОЛЬКО владельцу карточки или суперпользователю -->
+                {% if product.owner == user or user.is_superuser %}
+                    <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-warning text-dark">Редактировать товар</a>
+                {% endif %}
+
+                <!-- 2. Кнопка УДАЛЕНИЯ: доступна владельцу или модератору с полным правом удаления -->
+                {% if product.owner == user or perms.catalog.delete_product or user.is_superuser %}
+                    <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-danger">Удалить товар</a>
+                {% endif %}
+
+                <!-- 3. КНОПКА МОДЕРАТОРА: Быстрое изменение статуса публикации (Задание 1) -->
+                {% if perms.catalog.can_unpublish_product or user.is_superuser %}
+                    <form method="post" action="{% url 'catalog:product_toggle_publish' product.pk %}" class="d-inline m-0 p-0">
+                        {% csrf_token %}
+                        {% if product.is_published %}
+                            <!-- Если опубликован — показываем серую кнопку для снятия -->
+                            <button type="submit" class="btn btn-outline-danger">
+                                <i class="bi bi-x-circle me-1"></i> Снять с публикации
+                            </button>
+                        {% else %}
+                            <!-- Если на модерации — показываем яркую зеленую кнопку одобрения -->
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle me-1"></i> Одобрить и опубликовать
+                            </button>
+                        {% endif %}
+                    </form>
+                {% endif %}
             </div>
         </div>
     </div>
