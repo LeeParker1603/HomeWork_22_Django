@@ -15,6 +15,19 @@ from dotenv import load_dotenv
 
 from pathlib import Path
 
+# 1. ГЛОБАЛЬНЫЙ ПАТЧ: Отключаем RESP3/HELLO и уведомления об обслуживании для старого Redis на Windows
+from redis.connection import Connection
+
+# Отключаем проверку уведомлений об обслуживании, которая вызывает RedisError
+Connection._configure_maintenance_notifications = lambda *args, **kwargs: None
+
+# Перехватываем инициализацию соединения и принудительно задаем протокол RESP2
+original_init = Connection.__init__
+def patched_init(self, *args, **kwargs):
+    kwargs['protocol'] = 2  # Блокирует команду HELLO
+    original_init(self, *args, **kwargs)
+Connection.__init__ = patched_init
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -145,4 +158,17 @@ LOGIN_REDIRECT_URL = 'catalog:home'
 
 # Куда перенаправлять пользователя, если он пытается зайти на закрытую страницу анонимом
 LOGIN_URL = 'users:login'
+
+
+# Время жизни кеша по умолчанию (в секундах, 15 минут)
+CACHE_TIMEOUT = 60 * 15
+
+CACHE_ENABLED = True
+if CACHE_ENABLED:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': 'redis://localhost:6379/1',
+        }
+    }
 

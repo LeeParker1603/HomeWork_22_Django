@@ -5,6 +5,8 @@ from django.urls import reverse_lazy, reverse
 from catalog.models import Product, Category, ContactInfo
 from catalog.forms import ProductForm
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin
+from catalog.services import get_products_by_category
+from django.core.cache import cache
 
 
 class ProductListView(ListView):
@@ -16,6 +18,18 @@ class ProductListView(ListView):
     def get_queryset(self):
         """Динамическая фильтрация товаров в зависимости от прав пользователя"""
         user = self.request.user
+
+        # Кешируем выборку только для неавторизованных гостей (так как у них список статичен)
+        if not user.is_authenticated:
+            key = 'public_products_list'
+            products = cache.get(key)
+
+            if products is None:
+                # Если в Redis пусто — делаем тяжелый SQL-запрос
+                products = list(Product.objects.filter(is_published=True).order_by('-created_at'))
+                # Сохраняем результат в кэш на 10 минут
+                cache.set(key, products, timeout=60 * 10)
+            return products
 
         # Если пользователь — суперпользователь или модератор с правом публикации
         if user.is_authenticated and (user.is_superuser or user.has_perm('catalog.can_unpublish_product')):
@@ -51,6 +65,23 @@ class ProductDetailView(DetailView):
         obj.views_count += 1
         obj.save()
         return obj
+
+
+class CategoryProductsListView(ListView):
+    """Представление для отображения продуктов по конкретной категории"""
+    template_name = 'catalog/category_products.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        # Используем сервисную функцию
+        return get_products_by_category(self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Добавляем саму категорию в контекст для заголовка
+        from django.shortcuts import get_object_or_404
+        context['category'] = get_object_or_404(Category, pk=self.kwargs['pk'])
+        return context
 
 
 class ProductCreateView(LoginRequiredMixin, CreateView):
@@ -94,6 +125,17 @@ class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         perms = [self.permission_required, 'catalog.can_unpublish_product']
         return any(self.request.user.has_perm(perm) for perm in perms)
 
+    # [ДОБАВИТЬ ЭТОТ МЕТОД] Сброс кэша при сохранении изменений автором
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        # Очищаем кэш, так как данные продукта обновились
+        cache.delete('public_products_list')
+        cache.delete(f'products_category_{self.object.category_id}')
+        cache.clear()
+
+        return response
+
     def get_success_url(self):
         # После редактирования возвращаем пользователя на детальную страницу товара
         return reverse('catalog:product_detail', kwargs={'pk': self.object.pk})
@@ -134,15 +176,17 @@ class ProductTogglePublishView(PermissionRequiredMixin, View):
     permission_required = 'catalog.can_unpublish_product'
 
     def post(self, request, pk):
-        # Находим продукт по его ID
         product = get_object_or_404(Product, pk=pk)
 
-        # Меняем булево значение на противоположное
+        # Меняем статус публикации
         product.is_published = not product.is_published
         product.save()
 
-        # Перенаправляем модератора обратно на страницу этого же товара
-        return redirect('catalog:product_detail', pk=pk)
+        # ИНВАЛИДАЦИЯ КЭША (Сброс):
+        cache.clear()
+
+        # ПЕРЕХОД: Перенаправляем модератора строго на главную страницу каталога
+        return redirect('catalog:home')
 
 
 class ContactsTemplateView(TemplateView):
