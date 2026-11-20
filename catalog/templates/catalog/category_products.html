@@ -1,0 +1,37 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}Категория: {{ category.name }} — Skystore{% endblock %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">{{ category.name }}</h1>
+    <p class="lead">{{ category.description }}</p>
+    <a href="{% url 'catalog:home' %}" class="btn btn-outline-secondary">Назад в каталог</a>
+</div>
+
+<div class="row text-start justify-content-start">
+    {% for product in products %}
+        <!-- Стандартная карточка продукта (как в home.html) -->
+        <div class="col-md-4 col-sm-6 mb-4">
+            <div class="card h-100 box-shadow">
+                {% if product.photo %}
+                    <img src="{{ product.photo.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <span class="text-muted">Нет фото</span>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <h4 class="card-title fw-bold">{{ product.name }}</h4>
+                    <h5 class="text-primary">{{ product.price }} руб.</h5>
+                    <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-primary w-100 mt-3">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12 text-center">
+            <div class="alert alert-info">В этой категории пока нет опубликованных товаров.</div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

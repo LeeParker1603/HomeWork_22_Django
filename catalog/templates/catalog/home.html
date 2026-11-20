@@ -10,6 +10,22 @@
 </div>
 
 <div class="row text-center justify-content-start">
+    <div class="container mb-5">
+        <h5 class="text-secondary fw-bold mb-3"><i class="bi bi-tags"></i> Фильтр по категориям:</h5>
+        <div class="d-flex flex-wrap gap-2">
+            <!-- Кнопка "Все категории" (возвращает на главную) -->
+            <a href="{% url 'catalog:home' %}" class="btn btn-primary shadow-sm">
+                Все категории
+            </a>
+
+            <!-- Динамические кнопки для каждой категории в базе данных -->
+            {% for category in categories_list %}
+                <a href="{% url 'catalog:category_products' category.pk %}" class="btn btn-outline-primary shadow-sm">
+                    {{ category.name }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
     {% for product in page_obj %}
         <!-- Если продукт НЕ опубликован, добавляем Bootstrap-класс opacity-50 (карточка станет тусклой) -->
         <div class="col-md-4 col-sm-6 mb-4 {% if not product.is_published %}opacity-50{% endif %}">
